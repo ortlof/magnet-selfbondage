@@ -1,0 +1,171 @@
+EESchema Schematic File Version 4
+EELAYER 30 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L Connector:Conn_01x04_Female J2
+U 1 1 5E87064A
+P 3350 4950
+F 0 "J2" H 3378 4926 50  0000 L CNN
+F 1 "Conn_01x04_Female" H 3378 4835 50  0000 L CNN
+F 2 "Connector_JST:JST_XH_B4B-XH-A_1x04_P2.50mm_Vertical" H 3350 4950 50  0001 C CNN
+F 3 "~" H 3350 4950 50  0001 C CNN
+	1    3350 4950
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	2800 6900 2800 6800
+Wire Wire Line
+	2800 6300 2850 6300
+Wire Wire Line
+	3550 5050 3850 5050
+Wire Wire Line
+	3550 4950 3950 4950
+$Comp
+L Diode:BYV79-100 D1
+U 1 1 5E887A94
+P 1300 7050
+F 0 "D1" V 1254 7129 50  0000 L CNN
+F 1 "BYV79-100" V 1345 7129 50  0000 L CNN
+F 2 "SM-Magnet:TO254P1053X483X1985-3" H 1300 6875 50  0001 C CNN
+F 3 "http://pdf.datasheetcatalog.com/datasheet/philips/BYV79-100.pdf" H 1300 7050 50  0001 C CNN
+	1    1300 7050
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	4100 4850 3550 4850
+$Comp
+L Connector:Conn_01x02_Female J3
+U 1 1 5E89D216
+P 4550 4700
+F 0 "J3" H 4578 4676 50  0000 L CNN
+F 1 "Conn_01x02_Female" H 4578 4585 50  0000 L CNN
+F 2 "Connector_JST:JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical" H 4550 4700 50  0001 C CNN
+F 3 "~" H 4550 4700 50  0001 C CNN
+	1    4550 4700
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4100 4800 4100 4850
+Wire Wire Line
+	3550 4700 3550 4750
+$Comp
+L Device:R R1
+U 1 1 5E8A0F76
+P 3100 6950
+F 0 "R1" H 3170 6996 50  0000 L CNN
+F 1 "R" H 3170 6905 50  0000 L CNN
+F 2 "Resistor_THT:R_Box_L8.4mm_W2.5mm_P5.08mm" V 3030 6950 50  0001 C CNN
+F 3 "~" H 3100 6950 50  0001 C CNN
+	1    3100 6950
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3100 6800 2800 6800
+Connection ~ 2800 6800
+Wire Wire Line
+	2800 6800 2800 6300
+Wire Wire Line
+	1300 6750 1300 6800
+Wire Wire Line
+	1300 6800 2400 6800
+Connection ~ 1300 6800
+Wire Wire Line
+	1300 6800 1300 6900
+$Comp
+L L7805ABV:L7805ABV U1
+U 1 1 5E88266A
+P 3000 5650
+F 0 "U1" H 3000 6017 50  0000 C CNN
+F 1 "L7805ABV" H 3000 5926 50  0000 C CNN
+F 2 "TO254P460X1020X1945-3P" H 3000 5650 50  0001 L BNN
+F 3 "STMicroelectronics" H 3000 5650 50  0001 L BNN
+	1    3000 5650
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2400 5550 2400 6800
+Wire Wire Line
+	3600 5750 3600 5800
+Wire Wire Line
+	3600 6200 2850 6200
+Wire Wire Line
+	2850 6200 2850 6300
+Wire Wire Line
+	3600 5550 3850 5550
+Wire Wire Line
+	3850 5550 3850 5050
+Wire Wire Line
+	3950 4950 3950 7100
+Wire Wire Line
+	3100 7100 3950 7100
+Wire Wire Line
+	3600 5800 4250 5800
+Wire Wire Line
+	4250 5800 4250 4800
+Connection ~ 3600 5800
+Wire Wire Line
+	3600 5800 3600 6200
+Connection ~ 4250 4800
+Wire Wire Line
+	4250 4800 4100 4800
+Wire Wire Line
+	1400 6750 1400 6900
+Wire Wire Line
+	2650 6900 2650 6800
+Wire Wire Line
+	2650 6800 2800 6800
+Wire Wire Line
+	1400 6900 2650 6900
+$Comp
+L RFP30N06LE:RFP30N06LE Q1
+U 1 1 5E89D7EE
+P 2800 7200
+F 0 "Q1" H 2961 7109 50  0000 L CNN
+F 1 "RFP30N06LE" H 2961 7200 50  0000 L CNN
+F 2 "TRANS_RFP30N06LE" H 2961 7291 50  0000 L CNN
+F 3 "FAIRCHILD SEMICONDUCTORS" H 2800 7200 50  0001 L BNN
+	1    2800 7200
+	-1   0    0    1   
+$EndComp
+Connection ~ 3100 7100
+Wire Wire Line
+	2400 7300 2400 7500
+Wire Wire Line
+	2400 7500 2800 7500
+$Comp
+L Connector:Conn_01x03_Female J1
+U 1 1 5E8BBC4E
+P 1300 6550
+F 0 "J1" V 1238 6698 50  0000 L CNN
+F 1 "Conn_01x03_Female" V 1147 6698 50  0000 L CNN
+F 2 "Connector_JST:JST_XH_B3B-XH-A_1x03_P2.50mm_Vertical" H 1300 6550 50  0001 C CNN
+F 3 "~" H 1300 6550 50  0001 C CNN
+	1    1300 6550
+	0    1    -1   0   
+$EndComp
+Wire Wire Line
+	1200 7300 1300 7300
+Wire Wire Line
+	1300 7200 1300 7300
+Connection ~ 1300 7300
+Wire Wire Line
+	1300 7300 2400 7300
+Wire Wire Line
+	1200 6750 1200 7300
+Wire Wire Line
+	4350 4700 3550 4700
+Wire Wire Line
+	4350 4800 4250 4800
+$EndSCHEMATC

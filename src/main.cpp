@@ -76,6 +76,7 @@ boolean subbyscare = false;
 boolean buttonActive = false;
 boolean longPressActive = false;
 boolean startup = true;
+boolean wifimode = false;
 
 const int led = 13;
 
@@ -147,7 +148,12 @@ void handleShortPress() {
 }
  
 void handleLongPress() {
-   startTimer = true;
+  if(startTimer == false){
+    startTimer = true;
+  } else {
+      startTimer = false;
+    }
+    
 }
 
 void buttonLogic() {
@@ -235,8 +241,32 @@ void handleNotFound() {
   digitalWrite(led, 0);
 }
 
-void setup()
-{
+void handlewifistartup(){
+      WiFiManager wifiManager;
+      wifiManager.setTimeout(180);
+
+      if(wifiManager.autoConnect()) {
+        WiFi.setHostname("lockmeup");
+        tft.setTextSize(2);
+        tft.setCursor(30, 45);
+        tft.print("IP-Adress:");
+        tft.setCursor(10, 75);
+        tft.print(WiFi.localIP());
+        wifimode = true;
+      } else {
+        wifiManager.startConfigPortal("OnDemandAP");
+        WiFi.setHostname("lockmeup");
+        tft.setTextSize(2);
+        tft.setCursor(30, 45);
+        tft.print("Wifi Mode");
+        tft.setCursor(10, 75);
+        tft.print(WiFi.localIP());
+        wifimode = true;
+      }
+    
+}
+
+void setup(){
     Serial.begin(115200);
     tft.init();
     tft.setRotation(3);
@@ -245,41 +275,37 @@ void setup()
     tft.setCursor(50, 10);
     tft.setTextSize(3);
     tft.print("LockMeUP");
-
+    
     pinMode(button.pin, INPUT_PULLUP);
     pinMode(MAGNET, OUTPUT);
     digitalWrite(MAGNET,LOW);
-    button.currentState = digitalRead(button.pin);
-    if(button.currentState == PRESSED){
-       WiFiManager wifiManager;
-       wifiManager.startConfigPortal("OnDemandAP");
-    } else {
-       WiFiManager wifiManager;
-       wifiManager.autoConnect();
-       
-    }
-    WiFi.setHostname("lockmeup");
-    tft.setCursor(30, 45);
-    tft.print("IP-Adress:");
-    tft.setCursor(10, 75);
-    tft.print(WiFi.localIP());
 
-  server.on("/", handleRoot);
-  server.on("/readADC", readadc);
-  server.on("/time1", handletime1);
-  server.on("/time2", handletime2);
-  server.on("/time3", handletime3);
-  server.on("/time4", handletime4);
-  server.on("/time5", handletime5);
-  server.onNotFound(handleNotFound);
-  server.begin();
-  Serial.println("HTTP server started");
+    button.currentState = digitalRead(button.pin);
+    if(button.currentState == LOW){
+      handlewifistartup();
+    }
+
+    if (wifimode == true){
+    server.on("/", handleRoot);
+    server.on("/readADC", readadc);
+    server.on("/time1", handletime1);
+    server.on("/time2", handletime2);
+    server.on("/time3", handletime3);
+    server.on("/time4", handletime4);
+    server.on("/time5", handletime5);
+    server.onNotFound(handleNotFound);
+    server.begin();
+    Serial.println("HTTP server started");
+    }
+
   }
 
 void loop(){
+  if (wifimode == true){
     WiFiClient client;
     const int httpPort = 80;
     server.handleClient();
+  }
     buttonLogic();
     timerLogic();
     if (startTimer == false) {
