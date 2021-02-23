@@ -6,14 +6,11 @@
 #include <Button2.h>
 #include "esp_adc_cal.h"
 #include "index.html.h"  //Web page header file 
-
 #if defined(ESP8266)
 #include <ESP8266WiFi.h>          //https://github.com/esp8266/Arduino
 #else
 #include <WiFi.h>          //https://github.com/esp8266/Arduino
 #endif
-
-//needed for library
 #include <DNSServer.h>
 #if defined(ESP8266)
 #include <ESP8266WebServer.h>
@@ -21,28 +18,28 @@
 #include <WebServer.h>
 #endif
 #include <WiFiManager.h>         //https://github.com/tzapu/WiFiManager
-
 #ifndef TFT_DISPOFF
 #define TFT_DISPOFF 0x28
 #endif
-
 #ifndef TFT_SLPIN
 #define TFT_SLPIN   0x10
 #endif
-
 #define TFT_MOSI            19
 #define TFT_SCLK            18
 #define TFT_CS              5
 #define TFT_DC              16
 #define TFT_RST             23
-
 #define TFT_BL          4  // Display backlight control pin
 #define ADC_EN          14
 #define ADC_PIN         34
 #define MAGNET      27
-
 #define PRESSED LOW
 #define NOT_PRESSED HIGH
+
+float VBAT;
+float VLOW = 3.3;
+
+const uint8_t vbatPin = 34;
 
 WebServer server(80);
 
@@ -77,6 +74,7 @@ boolean buttonActive = false;
 boolean longPressActive = false;
 boolean startup = true;
 boolean wifimode = false;
+boolean battlow = false;
 
 const int led = 13;
 
@@ -276,6 +274,7 @@ void setup(){
     tft.setTextSize(3);
     tft.print("LockMeUP");
     
+    pinMode(vbatPin, INPUT);
     pinMode(button.pin, INPUT_PULLUP);
     pinMode(MAGNET, OUTPUT);
     digitalWrite(MAGNET,LOW);
@@ -301,6 +300,16 @@ void setup(){
   }
 
 void loop(){
+  VBAT = (float)(analogRead(vbatPin)) *2 / 1135;
+    if(VBAT < VLOW){
+    battlow = true;
+    }
+
+  if (battlow == true){
+       tft.setCursor(15, 45);
+       tft.setTextSize(2);
+       tft.print("Battery Low");
+
   if (wifimode == true){
     WiFiClient client;
     const int httpPort = 80;
@@ -314,4 +323,6 @@ void loop(){
         digitalWrite(MAGNET,HIGH);
         displayLogic();
     }
+  }  
+
 }
