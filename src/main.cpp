@@ -75,6 +75,7 @@ boolean longPressActive = false;
 boolean startup = true;
 boolean wifimode = false;
 boolean battlow = false;
+boolean security = true; 
 
 const int led = 13;
 
@@ -149,7 +150,9 @@ void handleLongPress() {
   if(startTimer == false){
     startTimer = true;
   } else {
+      if(security == true){
       startTimer = false;
+      }
     }
     
 }
@@ -216,6 +219,18 @@ void handletime5() {
     subbyscare = true;
 }
 
+void handletime6() {
+    security = false;
+}
+
+void handletime7() {
+    hoursValue = "00";
+    minutesValue = "00";
+    startTimer = false;
+    subbyscare = false;
+    security = true; 
+}
+
 void readadc(){
     String adcValue = String(hoursValue)+(":")+String(minutesValue);
     server.send(200, "text/plane", adcValue);
@@ -239,7 +254,23 @@ void handleNotFound() {
   digitalWrite(led, 0);
 }
 
-void handlewifistartup(){
+void setup(){
+    Serial.begin(115200);
+    tft.init();
+    tft.setRotation(3);
+    tft.fillScreen(TFT_PURPLE);
+    tft.setTextColor(TFT_WHITE);
+    tft.setCursor(50, 10);
+    tft.setTextSize(3);
+    tft.print("LockMeUP");
+    
+    pinMode(vbatPin, INPUT);
+    pinMode(button.pin, INPUT_PULLUP);
+    pinMode(MAGNET, OUTPUT);
+    digitalWrite(MAGNET,LOW);
+
+    button.currentState = digitalRead(button.pin);
+    if(button.currentState == LOW){
       WiFiManager wifiManager;
       wifiManager.setTimeout(180);
 
@@ -261,37 +292,18 @@ void handlewifistartup(){
         tft.print(WiFi.localIP());
         wifimode = true;
       }
-    
-}
-
-void setup(){
-    Serial.begin(115200);
-    tft.init();
-    tft.setRotation(3);
-    tft.fillScreen(TFT_PURPLE);
-    tft.setTextColor(TFT_WHITE);
-    tft.setCursor(50, 10);
-    tft.setTextSize(3);
-    tft.print("LockMeUP");
-    
-    pinMode(vbatPin, INPUT);
-    pinMode(button.pin, INPUT_PULLUP);
-    pinMode(MAGNET, OUTPUT);
-    digitalWrite(MAGNET,LOW);
-
-    button.currentState = digitalRead(button.pin);
-    if(button.currentState == LOW){
-      handlewifistartup();
     }
 
     if (wifimode == true){
     server.on("/", handleRoot);
-    server.on("/readADC", readadc);
     server.on("/time1", handletime1);
     server.on("/time2", handletime2);
     server.on("/time3", handletime3);
     server.on("/time4", handletime4);
     server.on("/time5", handletime5);
+    server.on("/btn6", handletime6);
+    server.on("/btn7", handletime7);
+    server.on("/readADC", readadc);
     server.onNotFound(handleNotFound);
     server.begin();
     Serial.println("HTTP server started");
@@ -300,19 +312,18 @@ void setup(){
   }
 
 void loop(){
-  VBAT = (float)(analogRead(vbatPin)) *2 / 1135;
-    if(VBAT < VLOW){
-    battlow = true;
-    }
+  //VBAT = (float)(analogRead(vbatPin)) *2 / 1135;
+  //  if(VBAT < VLOW){
+  //  battlow = true;
+  //  }
 
-  if (battlow == true){
-       tft.setCursor(15, 45);
-       tft.setTextSize(2);
-       tft.print("Battery Low");
+  //if (battlow == true){
+  //     tft.setCursor(15, 45);
+  //   tft.setTextSize(2);
+  //    tft.print("Battery Low");
 
   if (wifimode == true){
     WiFiClient client;
-    const int httpPort = 80;
     server.handleClient();
   }
     buttonLogic();
@@ -324,5 +335,3 @@ void loop(){
         displayLogic();
     }
   }  
-
-}
