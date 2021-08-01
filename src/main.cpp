@@ -6,6 +6,8 @@
 #include <Button2.h>
 #include "esp_adc_cal.h"
 #include "index.html.h"  //Web page header file 
+#include "menue.html.h"
+#include "update.html.h"
 #if defined(ESP8266)
 #include <ESP8266WiFi.h>          //https://github.com/esp8266/Arduino
 #else
@@ -58,6 +60,8 @@ int buttonState = 0;
 boolean startTimer = false;
 String minutesValue = "00";
 String hoursValue = "00";
+String subby = "OFF";
+
 unsigned long blinkTimerMillis = 0;
 unsigned long timerCountDownMillis = 0;
 unsigned long countDownMillis = 1000;
@@ -194,18 +198,31 @@ void handleRoot() {
  server.send(200, "text/html", s); //Send web page
 }
 
+void handleMenue() {
+ String s = SUB_page; //Read HTML contents
+ server.send(200, "text/html", s); //Send web page
+}
+
+void handleupdate(){
+ String s = update_page; 
+ server.send(200, "text/html", s);
+}
+
 void handletime1() {
     hoursValue = hoursValue.toInt() + 10;
     tftprint();
+    server.send(200, "text/html"); //Send web page
 }
 
 void handletime2() {
     hoursValue = hoursValue.toInt() + 5;
     tftprint();
+    server.send(200, "text/html"); //Send web page
 }
 
 void handletime3() {
     startTimer = true;
+    server.send(200, "text/html"); //Send web page
 }
 
 void handletime4() {
@@ -213,14 +230,23 @@ void handletime4() {
     minutesValue = "00";
     hoursValue = "00";
     tftprint();
+    server.send(200, "text/html"); //Send web page
 }
 
 void handletime5() {
+    if(subbyscare == true){
+    subbyscare = false;
+    String subby = "OFF";
+    } else {
     subbyscare = true;
+    String subby = "ON";  
+    }
+    server.send(200, "text/plane", subby); //Send web page
 }
 
 void handletime6() {
     security = false;
+    server.send(200, "text/plane"); //Send web page
 }
 
 void handletime7() {
@@ -229,6 +255,7 @@ void handletime7() {
     startTimer = false;
     subbyscare = false;
     security = true; 
+    server.send(200, "text/html"); //Send web page
 }
 
 void readadc(){
@@ -296,14 +323,40 @@ void setup(){
 
     if (wifimode == true){
     server.on("/", handleRoot);
+    server.on("/menue", handleMenue);
     server.on("/time1", handletime1);
     server.on("/time2", handletime2);
     server.on("/time3", handletime3);
     server.on("/time4", handletime4);
-    server.on("/time5", handletime5);
+    server.on("/btn5", handletime5);
     server.on("/btn6", handletime6);
     server.on("/btn7", handletime7);
     server.on("/readADC", readadc);
+    server.on("/updatesite", handleupdate);
+
+   /* server.on("/update", HTTP_POST, []() {
+    server.sendHeader("Connection", "close");
+    server.send(200, "text/plain", (Update.hasError()) ? "FAIL" : "OK");
+    ESP.restart();
+  }, []() {
+    HTTPUpload& upload = server.upload();
+    if (upload.status == UPLOAD_FILE_START) {
+      Serial.printf("Update: %s\n", upload.filename.c_str());
+      if (!Update.begin(UPDATE_SIZE_UNKNOWN)) { //start with max available size
+        Update.printError(Serial);
+      }
+    } else if (upload.status == UPLOAD_FILE_WRITE) {
+      if (Update.write(upload.buf, upload.currentSize) != upload.currentSize) {
+        Update.printError(Serial);
+      }
+    } else if (upload.status == UPLOAD_FILE_END) {
+      if (Update.end(true)) { //true to set the size to the current progress
+        Serial.printf("Update Success: %u\nRebooting...\n", upload.totalSize);
+      } else {
+        Update.printError(Serial);
+      }
+    }
+  }); */
     server.onNotFound(handleNotFound);
     server.begin();
     Serial.println("HTTP server started");

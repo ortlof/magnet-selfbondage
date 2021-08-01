@@ -1,3 +1,4 @@
+const char SUB_page[] PROGMEM = R"=====(
 <!DOCTYPE html>
 <html>
 <style>
@@ -84,11 +85,10 @@ p.header2{
 <body>
 
 <div class="card">
-  <p class="header1">Kinky Winky's LockMeUP</p>
   <div class="container">
-  <p class="header2"><span id="timevalue">00:00</span></p>
+    <a class="btn"  onclick="window.location.href = '/';">Home</a>
   </div>
- <div class="container">
+  <div class="container">
     <a class="btn"  onclick="btn1()">+ 10 Minutes</a>
  </div>
  <div class="container">   
@@ -98,25 +98,19 @@ p.header2{
     <a class="btn"  onclick="btn3()">Start Lock</a>
  </div>
  <div class="container">
-  <a class="btn"  onclick="window.location.href = '/menue';">More</a>
+  <a class="btn"  onclick="btn4()">Stop Lock</a>
+</div>
+<div class="container">
+  <a class="btn"  onclick="btn5()">Scare Mode <span id="subby">OFF</span></a>
+</div>
+<div class="container">
+  <a class="btn"  onclick="btn6()">Disable Safety</a>
+</div>
+<div class="container">
+  <a class="btn"  onclick="btn7()">Reset</a>
 </div>
 </div>
 <script>
-
-setInterval(function() {
-  getData();// Call a function repetatively with 2 Second interval
-}, 2000); //2000mSeconds update rate
-
-function getData() {
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-      document.getElementById("timevalue").innerHTML = this.responseText;
-    }
-  };
-  xhttp.open("GET", "readADC", true);
-  xhttp.send();
-}
 
 function btn1() {
   var xhttp = new XMLHttpRequest();
@@ -165,10 +159,10 @@ function btn5() {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-      document.getElementById("demo").innerHTML = this.responseText;
+      document.getElementById("subby").innerHTML = this.responseText;
     }
   };
-  xhttp.open("GET", "time5", true);
+  xhttp.open("GET", "btn5", true);
   xhttp.send();
 }
 function btn6() {
@@ -194,3 +188,4 @@ function btn7() {
 </script>
 </body>
 </html>
+)=====";

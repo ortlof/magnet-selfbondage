@@ -99,23 +99,14 @@ p.header2{
     <a class="btn"  onclick="btn3()">Start Lock</a>
  </div>
  <div class="container">
-  <a class="btn"  onclick="btn4()">Stop Lock</a>
-</div>
-<div class="container">
-  <a class="btn"  onclick="btn5()">Scare Mode</a>
-</div>
-<div class="container">
-  <a class="btn"  onclick="btn6()">Disable Safety</a>
-</div>
-<div class="container">
-  <a class="btn"  onclick="btn7()">Reset</a>
+  <a class="btn"  onclick="window.location.href = '/menue';">More</a>
 </div>
 </div>
 <script>
 
 setInterval(function() {
   getData();// Call a function repetatively with 2 Second interval
-}, 10000); //2000mSeconds update rate
+}, 900); //2000mSeconds update rate
 
 function getData() {
   var xhttp = new XMLHttpRequest();
