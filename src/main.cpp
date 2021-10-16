@@ -8,6 +8,7 @@
 #include "index.html.h"  //Web page header file 
 #include "menue.html.h"
 #include "update.html.h"
+#include <Battery18650Stats.h>
 #if defined(ESP8266)
 #include <ESP8266WiFi.h>          //https://github.com/esp8266/Arduino
 #else
@@ -37,6 +38,9 @@
 #define MAGNET      27
 #define PRESSED LOW
 #define NOT_PRESSED HIGH
+
+
+Battery18650Stats battery(ADC_PIN);
 
 float VBAT;
 float VLOW = 3.3;
@@ -81,7 +85,7 @@ boolean wifimode = false;
 boolean battlow = false;
 boolean security = true; 
 
-const int led = 13;
+const int led = 21;
 
 typedef struct Buttons {
     const byte pin = 26;
@@ -115,7 +119,6 @@ void timerLogic() {
   }
 }
 
-
 void tftprint(){
     tft.fillScreen(TFT_PURPLE);
     tft.setTextColor(TFT_WHITE);
@@ -141,6 +144,12 @@ void displayLogic() {
     tft.print(minutesValue);
     }
   }
+}
+
+void powerLogic() {
+  if(battery.getBatteryVolts() < 3){
+    battlow = true;
+  };
 }
 
 void handleShortPress() {
@@ -287,9 +296,14 @@ void setup(){
     tft.setRotation(3);
     tft.fillScreen(TFT_PURPLE);
     tft.setTextColor(TFT_WHITE);
-    tft.setCursor(50, 10);
+    tft.setCursor(50, 20);
     tft.setTextSize(3);
     tft.print("LockMeUP");
+    tft.setCursor(0, 0);
+    tft.setTextSize(2);
+    tft.print("Battery:");
+    tft.setCursor(160, 0);
+    tft.println(battery.getBatteryChargeLevel(true));
     
     pinMode(vbatPin, INPUT);
     pinMode(button.pin, INPUT_PULLUP);
@@ -360,25 +374,23 @@ void setup(){
     server.onNotFound(handleNotFound);
     server.begin();
     Serial.println("HTTP server started");
-    }
-
+    };
   }
 
 void loop(){
-  //VBAT = (float)(analogRead(vbatPin)) *2 / 1135;
-  //  if(VBAT < VLOW){
-  //  battlow = true;
-  //  }
+  powerLogic();
 
-  //if (battlow == true){
-  //     tft.setCursor(15, 45);
-  //   tft.setTextSize(2);
-  //    tft.print("Battery Low");
+  if (battlow == true){
+       tft.setCursor(15, 45);
+       tft.setTextSize(2);
+      tft.print("Battery Low");}
+      else{
 
   if (wifimode == true){
     WiFiClient client;
     server.handleClient();
   }
+    
     buttonLogic();
     timerLogic();
     if (startTimer == false) {
@@ -387,4 +399,5 @@ void loop(){
         digitalWrite(MAGNET,HIGH);
         displayLogic();
     }
+  }
   }  

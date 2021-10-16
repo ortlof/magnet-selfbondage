@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"name": "TEST",
+			"path": "..\\..\\..\\sm-2\\TEST"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"array": "cpp",
+			"initializer_list": "cpp",
+			"utility": "cpp",
+			"random": "cpp"
+		}
+	}
+}

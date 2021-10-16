@@ -85,7 +85,7 @@ p.header2{
 <body>
 
 <div class="card">
-  <p class="header1">Kinky Winky's LockMeUP</p>
+  <p class="header1">LockMeUP</p>
   <div class="container">
   <p class="header2"><span id="timevalue">00:00</span></p>
   </div>
