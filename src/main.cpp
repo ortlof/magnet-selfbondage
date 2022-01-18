@@ -39,7 +39,6 @@
 #define PRESSED LOW
 #define NOT_PRESSED HIGH
 
-
 Battery18650Stats battery(ADC_PIN);
 
 float VBAT;
@@ -302,8 +301,12 @@ void setup(){
     tft.setCursor(0, 0);
     tft.setTextSize(2);
     tft.print("Battery:");
+    tft.setCursor(120, 0);
+    /*tft.println(battery.getBatteryVolts());*/
+    
+    tft.println(battery.getBatteryChargeLevel(true)); 
     tft.setCursor(160, 0);
-    tft.println(battery.getBatteryChargeLevel(true));
+    tft.print("%");
     
     pinMode(vbatPin, INPUT);
     pinMode(button.pin, INPUT_PULLUP);
